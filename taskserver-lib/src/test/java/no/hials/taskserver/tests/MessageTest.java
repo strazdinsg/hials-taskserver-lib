@@ -2,6 +2,7 @@ package no.hials.taskserver.tests;
 
 import no.hials.taskserver.Message;
 import no.hials.taskserver.impl.MessageImpl;
+import no.hials.taskserver.impl.NotImplementedMsg;
 import no.hials.taskserver.impl.ResultCode;
 import no.hials.taskserver.impl.ResultMsg;
 import org.junit.Test;
@@ -81,5 +82,12 @@ public class MessageTest {
         msg.setMessage(m);
         assertEquals(ResultCode.NOT_IMPLEMENTED, msg.getCode());
         assertEquals(m, msg.getMessage());
+    }
+    
+    @Test
+    public void notImplMsgTest() {
+        NotImplementedMsg msg = new NotImplementedMsg();
+        assertEquals(ResultCode.NOT_IMPLEMENTED, msg.getCode());
+        assertEquals("result", msg.getCommand());
     }
 }
