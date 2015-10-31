@@ -257,7 +257,7 @@ public class MessageImpl implements Message {
         
         String result = "";
         for (Map.Entry<String, String> entry : parameters.entrySet()) {
-            result += entry.getKey() + ": " + entry.getValue() + "\r\n";
+            result += "  P: " + entry.getKey() + ": " + entry.getValue() + "\r\n";
         }
         return result;
     }
