@@ -53,6 +53,12 @@ public interface Message {
      * @return 
      */
     public String format();
+
+    /**
+     * Return contents of the message in a human-readable form
+     * @return 
+     */
+    public String dump();
     
     /**
      * Send the message to an output stream

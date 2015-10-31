@@ -4,8 +4,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import no.hials.taskserver.Message;
 
 /**
@@ -247,5 +245,20 @@ public class MessageImpl implements Message {
             // Message not ready to be sent
             return false;
         }
+    }
+    
+    /**
+     * Return message contents in a readable format
+     * @return 
+     */
+    @Override
+    public String dump() {
+        if (!isReady()) return "Message NOT READY!";
+        
+        String result = "";
+        for (Map.Entry<String, String> entry : parameters.entrySet()) {
+            result += entry.getKey() + ": " + entry.getValue() + "\r\n";
+        }
+        return result;
     }
 }
