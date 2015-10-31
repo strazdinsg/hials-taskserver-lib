@@ -52,4 +52,15 @@ public class MessageTest {
         assertEquals("Apelsin456", msg.getParamValue("password"));
         assertEquals(true, msg.isReady());
     }
+    
+    @Test
+    public void commandTest() {
+        MessageImpl msg = new MessageImpl(true);
+        String cmd = msg.getCommand();
+        assertNull(cmd);
+        
+        msg.setCommand("BlaBla");
+        cmd = msg.getCommand();
+        assertEquals("BlaBla", cmd);
+    }
 }

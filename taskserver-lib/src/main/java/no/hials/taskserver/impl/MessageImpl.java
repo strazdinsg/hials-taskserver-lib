@@ -25,6 +25,12 @@ enum State { WAIT_START, PARSE_PARAM_NAME, PARSE_PARAM_VALUE, READY, INVALID, OU
 public class MessageImpl implements Message {
     protected Map<String, String> parameters = new HashMap<>();
     
+    /**
+     * Key for command parameter
+     */
+    protected static final String KEY_CMD = "cmd";
+    
+    
     private State state = State.WAIT_START;
    
     // Separators
@@ -200,4 +206,19 @@ public class MessageImpl implements Message {
         return formatted;
     }
 
+    /**
+     * Set the command parameter
+     * @param cmd value to use
+     */
+    public void setCommand(String cmd) {
+        setParamValue(KEY_CMD, cmd);        
+    }
+    
+    /**
+     * Get the command value in this message
+     * @return 
+     */
+    public String getCommand() {
+        return getParamValue(KEY_CMD);
+    }
 }
