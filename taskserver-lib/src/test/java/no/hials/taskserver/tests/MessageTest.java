@@ -89,5 +89,10 @@ public class MessageTest {
         NotImplementedMsg msg = new NotImplementedMsg();
         assertEquals(ResultCode.NOT_IMPLEMENTED, msg.getCode());
         assertEquals("result", msg.getCommand());
+        
+        String message = "This feature is not currently implemented. Stay tuned...";
+        msg = new NotImplementedMsg(message);
+        assertEquals(ResultCode.NOT_IMPLEMENTED, msg.getCode());
+        assertEquals(message, msg.getMessage());
     }
 }

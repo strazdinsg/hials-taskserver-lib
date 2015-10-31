@@ -13,4 +13,8 @@ public class NotImplementedMsg extends ResultMsg {
     public NotImplementedMsg() {
         super(ResultCode.NOT_IMPLEMENTED, "Feature not implemented");
     }
+    
+    public NotImplementedMsg(String message) {
+        super(ResultCode.NOT_IMPLEMENTED, message);
+    }
 }
