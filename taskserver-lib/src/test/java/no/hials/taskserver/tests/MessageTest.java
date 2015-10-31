@@ -1,8 +1,11 @@
 package no.hials.taskserver.tests;
 
 import no.hials.taskserver.Message;
+import no.hials.taskserver.PasswordEncoder;
+import no.hials.taskserver.impl.LoginRequestMsg;
 import no.hials.taskserver.impl.MessageImpl;
 import no.hials.taskserver.impl.NotImplementedMsg;
+import no.hials.taskserver.impl.PlaintextEncoder;
 import no.hials.taskserver.impl.ResultCode;
 import no.hials.taskserver.impl.ResultMsg;
 import org.junit.Test;
@@ -94,5 +97,45 @@ public class MessageTest {
         msg = new NotImplementedMsg(message);
         assertEquals(ResultCode.NOT_IMPLEMENTED, msg.getCode());
         assertEquals(message, msg.getMessage());
+    }
+    
+    @Test
+    public void loginMsgTest() {
+        LoginRequestMsg msg = new LoginRequestMsg();
+        assertEquals("login", msg.getCommand());
+        msg.setUsername("Girts");
+        assertEquals("Girts", msg.getUsername());
+        assertNull(msg.getPassword());
+        
+        msg.setPlaintextPassword("Apelsin456");
+        assertEquals("Apelsin456", msg.getPassword());
+        assertEquals(PlaintextEncoder.NAME, msg.getMode());
+    }
+    
+    @Test
+    public void pwdEncoderTest() {
+        LoginRequestMsg msg = new LoginRequestMsg();
+        // Test encoders - a simple uppercase encoder
+        msg.addEncoder(new PasswordEncoder() {
+            @Override
+            public String getName() {
+                return "upcase";
+            }
+
+            /**
+             * Just a test encoder which makes the password uppercase
+             * @param plaintextPassword
+             * @return 
+             */
+            @Override
+            public String encode(String plaintextPassword) {
+                return plaintextPassword != null ? plaintextPassword.toUpperCase() : null;
+            }
+        });
+        
+        msg.setPassword("Apelsin456", "upcase");
+        assertEquals("APELSIN456", msg.getPassword());
+        assertEquals("upcase", msg.getMode());
+        assertNull(msg.getUsername());
     }
 }
