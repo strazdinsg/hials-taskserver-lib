@@ -25,5 +25,11 @@ public interface AppLogic {
      * @return next queued message or null if the queue is empty
      */
     Message getResponseMessage();
+    
+    /**
+     * When this function returns true, we should close the socket
+     * @return 
+     */
+    boolean shouldQuit();
 
 }
