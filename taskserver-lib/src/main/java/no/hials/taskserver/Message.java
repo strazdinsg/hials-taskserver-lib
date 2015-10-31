@@ -21,8 +21,9 @@ public interface Message {
      * After calling this function you should check the isReady() to see
      * if the message is received in whole and is ready to be handled by the app
      * @param b 
+     * @return true if the byte was parsed and is part of the message, false if it is ignored as garbage
      */
-    public void addByte(byte b);
+    public boolean addByte(byte b);
     
     /**
      * For incoming messages returns true when the whole message is received 

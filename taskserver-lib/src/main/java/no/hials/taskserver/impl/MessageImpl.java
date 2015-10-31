@@ -70,7 +70,7 @@ public class MessageImpl implements Message {
     }
     
     @Override
-    public void addByte(byte b) {
+    public boolean addByte(byte b) {
         char c = (char) b;
         
         // Always when start symbol received, forget the progress so far
@@ -78,7 +78,7 @@ public class MessageImpl implements Message {
         if (START_SYMBOL == c) {
             clear();
             state = State.PARSE_PARAM_NAME;
-            return;
+            return true;
         }
         
         switch (state) {
@@ -86,7 +86,7 @@ public class MessageImpl implements Message {
             case READY:
             case INVALID:
                 // we dismiss anything except start symbol which is handled above
-                break;
+                return false;
 
             case OUTGOING:
                 // When we start receiving bytes in a message that is outgoing,
@@ -106,7 +106,7 @@ public class MessageImpl implements Message {
                     case PARAM_SEPARATOR:
                         // Something wrong in the structure, no = found
                         state = State.INVALID;
-                        break;
+                        return false;
                     default:
                         // Must be regular character, so we append it to the param name
                         tmpName += c;
@@ -124,7 +124,7 @@ public class MessageImpl implements Message {
                     case KEYVAL_SEPARATOR:
                         // Another = char, that's an error
                         state = State.INVALID;
-                        break;
+                        return false;
                     case END_SYMBOL:
                         // Done, end of the last value
                         flushParamTemp();
@@ -138,6 +138,7 @@ public class MessageImpl implements Message {
                 break;
         }
         
+        return true;
     }
 
     /**

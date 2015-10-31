@@ -35,12 +35,22 @@ public class MessageTest {
   
     @Test
     public void buildTest() {
-        String msgData = "  >username=Girts#password=Apelsin456$   ";
+        String msgData = ">username=Girts#password=Apelsin456$";
         char[] msgChars = msgData.toCharArray();
         Message msg = new MessageImpl(false);
-        for (char c : msgChars) {
-            msg.addByte((byte) c);            
+        // First add some garbage
+        for (int i = 0; i < 3; ++i) {
+            assertFalse(msg.addByte((byte) ' '));
         }
+        // Then add meaningful content
+        for (char c : msgChars) {
+            assertTrue(msg.addByte((byte) c));            
+        }
+        // Then garbage again
+        for (int i = 0; i < 3; ++i) {
+            assertFalse(msg.addByte((byte) ' '));
+        }
+        
         assertEquals("Girts", msg.getParamValue("username"));
         assertNotSame("girts", msg.getParamValue("username"));
         assertEquals("Apelsin456", msg.getParamValue("password"));
