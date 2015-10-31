@@ -26,11 +26,11 @@ public class MessageTest {
         msg.setParamValue("username", "Girts");
         assertEquals(true, msg.isReady());
         assertEquals(">username=Girts$", msg.format());
-        msg.setParamValue("password", "Apelsing456");
+        msg.setParamValue("password", "Apelsin456");
         String f = msg.format();
         // Parameters can by in any sequence 
         assertTrue(">username=Girts#password=Apelsin456$".equals(f) 
-                || ">password=Apelsing456#username=Girts$".equals(f));
+                || ">password=Apelsin456#username=Girts$".equals(f));
     }
   
     @Test
