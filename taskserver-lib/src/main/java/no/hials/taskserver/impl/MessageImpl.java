@@ -1,7 +1,11 @@
 package no.hials.taskserver.impl;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import no.hials.taskserver.Message;
 
 /**
@@ -220,5 +224,28 @@ public class MessageImpl implements Message {
      */
     public String getCommand() {
         return getParamValue(KEY_CMD);
+    }
+
+    @Override
+    public boolean sendToStream(DataOutputStream out) {
+        String data = format();
+        if (data != null) {
+            try {
+                // Write bytes one by one
+                for (int i = 0; i < data.length(); ++i) {
+                    out.write((byte) data.charAt(i));
+                }
+                // Make sure all the buffered bytes are sent now
+                out.flush();
+                return true;
+                
+            } catch (IOException ex) {
+                // Something wrong while sending to the stream
+                return false;
+            }
+        } else {
+            // Message not ready to be sent
+            return false;
+        }
     }
 }

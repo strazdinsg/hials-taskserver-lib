@@ -1,5 +1,7 @@
 package no.hials.taskserver;
 
+import java.io.DataOutputStream;
+
 /**
  * Interface used to construct, parse and prepare/format messages exchanged
  * between the client and server
@@ -50,5 +52,12 @@ public interface Message {
      * according to the protocol so that it can be sent over the socket
      * @return 
      */
-    String format();
+    public String format();
+    
+    /**
+     * Send the message to an output stream
+     * @param out
+     * @return true when successfully sent, false otherwise
+     */
+    public boolean sendToStream(DataOutputStream out);
 }
