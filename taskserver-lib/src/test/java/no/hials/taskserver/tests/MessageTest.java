@@ -2,6 +2,8 @@ package no.hials.taskserver.tests;
 
 import no.hials.taskserver.Message;
 import no.hials.taskserver.impl.MessageImpl;
+import no.hials.taskserver.impl.ResultCode;
+import no.hials.taskserver.impl.ResultMsg;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -62,5 +64,22 @@ public class MessageTest {
         msg.setCommand("BlaBla");
         cmd = msg.getCommand();
         assertEquals("BlaBla", cmd);
+    }
+    
+    @Test
+    public void resultMsgTest() {
+        ResultMsg msg = new ResultMsg(ResultCode.RES_OK, null);
+        assertEquals(ResultCode.RES_OK, msg.getCode());
+        assertNull(msg.getMessage());
+        assertEquals("result", msg.getCommand());
+        
+        msg.setCode(ResultCode.NOT_IMPLEMENTED);
+        assertEquals(ResultCode.NOT_IMPLEMENTED, msg.getCode());
+        assertNull(msg.getMessage());
+        
+        String m = "This is an optional message";
+        msg.setMessage(m);
+        assertEquals(ResultCode.NOT_IMPLEMENTED, msg.getCode());
+        assertEquals(m, msg.getMessage());
     }
 }

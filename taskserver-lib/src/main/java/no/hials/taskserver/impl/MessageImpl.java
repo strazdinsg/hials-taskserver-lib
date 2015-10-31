@@ -28,7 +28,7 @@ public class MessageImpl implements Message {
     /**
      * Key for command parameter
      */
-    protected static final String KEY_CMD = "cmd";
+    private static final String KEY_CMD = "cmd";
     
     
     private State state = State.WAIT_START;
