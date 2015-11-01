@@ -18,10 +18,6 @@ public class LoginRequestMsg extends MessageImpl {
     // Predefined value for LoginRequest command parameter
     public final static String CMD = "login";
 
-    // Password encryption modes
-    private final static String MODE_PLAINTEXT = "plaintext";
-    private final static String MODE_MD5 = "md5";
-
     // All possible encoders stored here
     private final Map<String, PasswordEncoder> encoders = new HashMap<>();
     

@@ -2,12 +2,15 @@ package no.hials.taskserver.tests;
 
 import no.hials.taskserver.Message;
 import no.hials.taskserver.PasswordEncoder;
+import no.hials.taskserver.impl.GradingRequestMsg;
+import no.hials.taskserver.impl.GradingResponseMsg;
 import no.hials.taskserver.impl.LoginRequestMsg;
 import no.hials.taskserver.impl.MessageImpl;
 import no.hials.taskserver.impl.NotImplementedMsg;
 import no.hials.taskserver.impl.PlaintextEncoder;
 import no.hials.taskserver.impl.ResultCode;
 import no.hials.taskserver.impl.ResultMsg;
+import no.hials.taskserver.impl.TaskResponseMsg;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -163,5 +166,56 @@ public class MessageTest {
         assertEquals("Girts", loginMsg.getUsername());
         assertEquals("Apelsin456", loginMsg.getPassword());
         assertEquals(PlaintextEncoder.NAME, loginMsg.getMode());
+    }
+    
+    @Test
+    public void resultCastingTest() {
+        // Test if casting to ResultMsg works
+        MessageImpl msg = new MessageImpl(false);
+        msg.setCommand(ResultMsg.CMD);
+        msg.setIntParam(ResultMsg.KEY_CODE, ResultCode.INTERNAL_ERROR.ordinal());
+        String s = "Sample comment";
+        msg.setParamValue(ResultMsg.KEY_MESSAGE, s);
+        
+        ResultMsg resMsg = ResultMsg.createFrom(msg);
+        assertEquals(ResultMsg.CMD, resMsg.getCommand());
+        assertEquals(ResultCode.INTERNAL_ERROR, resMsg.getCode());
+        assertEquals(s, resMsg.getMessage());
+        
+    }
+    
+    @Test
+    public void gradingRequestTest() {
+        GradingRequestMsg msg = new GradingRequestMsg(true);
+        assertTrue(msg.isReady());
+        assertEquals(GradingRequestMsg.CMD, msg.getCommand());
+    }
+    
+    @Test
+    public void gradingResponseTest() {
+        GradingResponseMsg msg = new GradingResponseMsg(true);
+        msg.setCurrentGrade(60);
+        msg.setBestGrade(80);
+        msg.setStudentName("Girts");
+        String s = "Sample comment";
+        msg.setComment(s);
+        msg.setPass(true);
+        
+        assertEquals(GradingResponseMsg.CMD, msg.getCommand());
+        assertEquals(60, msg.getCurrentGrade());
+        assertEquals(80, msg.getBestGrade());
+        assertEquals("Girts", msg.getStudentName());
+        assertEquals(s, msg.getComment());
+        assertTrue(msg.isPass());
+    }
+    
+    @Test
+    public void taskResponseTest() {
+        TaskResponseMsg msg = new TaskResponseMsg(true);
+        String r = "Bla bla";
+        msg.setResult(r);
+        
+        assertEquals(TaskResponseMsg.CMD, msg.getCommand());
+        assertEquals(r, msg.getResult());        
     }
 }

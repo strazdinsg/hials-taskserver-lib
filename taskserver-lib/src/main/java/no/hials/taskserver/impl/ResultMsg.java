@@ -8,8 +8,8 @@ package no.hials.taskserver.impl;
  */
 public class ResultMsg extends MessageImpl {
     // Predefined keys
-    private final static String KEY_CODE = "code";
-    private final static String KEY_MESSAGE = "message";
+    public final static String KEY_CODE = "code";
+    public final static String KEY_MESSAGE = "message";
     // Predefined value for ResultMsg command parameter
     public final static String CMD = "result";
     

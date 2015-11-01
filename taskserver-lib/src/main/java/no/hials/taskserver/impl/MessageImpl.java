@@ -189,7 +189,33 @@ public class MessageImpl implements Message {
         if (paramName == null) return null;
         return parameters.get(paramName.toLowerCase());
     }
+    
+    /**
+     * Get integer value of a parameter
+     * @param paramName
+     * @return int value or -1 if the value is not present or has incorrect format
+     */
+    public int getIntParam(String paramName) {
+        String v = getParamValue(paramName);
+        if (v == null) return -1;
+        try {
+            return Integer.valueOf(v);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+    }
 
+    /**
+     * Get boolean value of a parameter
+     * @param paramName
+     * @return true for "true", false otherwise
+     */
+    public boolean getBoolParam(String paramName) {
+        String v = getParamValue(paramName);
+        if (v == null) return false;
+        return v.equalsIgnoreCase("true");
+    }
+    
     /**
      * Add a new parameter to the message
      * @param paramName always converted to lowercase
@@ -200,6 +226,24 @@ public class MessageImpl implements Message {
         if (paramName != null && !paramName.equals("")) {
             parameters.put(paramName.toLowerCase(), paramValue);
         }
+    }
+    
+    /**
+     * Set integer parameter value
+     * @param paramName
+     * @param value 
+     */
+    public void setIntParam(String paramName, int value) {
+        setParamValue(paramName, String.valueOf(value));
+    }
+    
+    /**
+     * Set boolean parameter value
+     * @param paramName
+     * @param value 
+     */
+    public void setBoolParam(String paramName, boolean value) {
+        setParamValue(paramName, value ? "true" : "false");
     }
 
     @Override
