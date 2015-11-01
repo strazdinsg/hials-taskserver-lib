@@ -11,7 +11,7 @@ public class ResultMsg extends MessageImpl {
     private final static String KEY_CODE = "code";
     private final static String KEY_MESSAGE = "message";
     // Predefined value for ResultMsg command parameter
-    private final static String CMD_RESULTMSG = "result";
+    public final static String CMD = "result";
     
     /**
      * Create an outgoing ResultMsg with specific code and text message
@@ -20,11 +20,24 @@ public class ResultMsg extends MessageImpl {
      */
     public ResultMsg(ResultCode code, String message) {
         super(true);
-        setCommand(CMD_RESULTMSG);
+        setCommand(CMD);
         setCode(code);
         setMessage(message);
     }
 
+    /**
+     * Create a ResultMsg message from message content.
+     * Can be used to cast from plain MessageImpl to specific ResultMsg
+     * @param srcMsg source message to be copied
+     * @return 
+     */
+    public static ResultMsg createFrom(MessageImpl srcMsg) {
+        if (srcMsg == null) return null;
+        ResultCode code = ResultCode.fromString(srcMsg.getParamValue(KEY_CODE));
+        ResultMsg msg = new ResultMsg(code, srcMsg.getParamValue(KEY_MESSAGE));
+        return msg;
+    }
+    
     /**
      * Get result/error code for the message
      * @return 
