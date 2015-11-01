@@ -148,4 +148,20 @@ public class MessageTest {
         assertEquals("upcase", msg.getMode());
         assertNull(msg.getUsername());
     }
+    
+    @Test
+    public void loginCastingTest() {
+        // Test if casting to LoginRequestMsg works
+        MessageImpl msg = new MessageImpl(false);
+        msg.setCommand(LoginRequestMsg.CMD);
+        msg.setParamValue(LoginRequestMsg.KEY_USERNAME, "Girts");
+        msg.setParamValue(LoginRequestMsg.KEY_PASSWORD, "Apelsin456");
+        msg.setParamValue(LoginRequestMsg.KEY_MODE, PlaintextEncoder.NAME);
+        
+        LoginRequestMsg loginMsg = LoginRequestMsg.createFrom(msg);
+        assertEquals(LoginRequestMsg.CMD, loginMsg.getCommand());
+        assertEquals("Girts", loginMsg.getUsername());
+        assertEquals("Apelsin456", loginMsg.getPassword());
+        assertEquals(PlaintextEncoder.NAME, loginMsg.getMode());
+    }
 }

@@ -69,6 +69,20 @@ public class MessageImpl implements Message {
         this.state = forSending ? State.OUTGOING : State.WAIT_START;
     }
     
+    /**
+     * Clone all data from source message to this one
+     * Warning! Copies reference to the same parameter map!
+     * @param srcMsg 
+     */
+    public void cloneFrom(MessageImpl srcMsg) {
+        if (srcMsg != null) {
+            this.parameters = srcMsg.parameters;
+            this.state = srcMsg.state;
+            this.tmpName = srcMsg.tmpName;
+            this.tmpValue = srcMsg.tmpValue;
+        }
+    }
+    
     @Override
     public boolean addByte(byte b) {
         char c = (char) b;

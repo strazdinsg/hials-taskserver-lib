@@ -12,16 +12,16 @@ import no.hials.taskserver.PasswordEncoder;
  */
 public class LoginRequestMsg extends MessageImpl {
     // Predefined keys
-    private final static String KEY_USERNAME = "username";
-    private final static String KEY_PASSWORD = "password";
-    private final static String KEY_MODE = "mode";
+    public final static String KEY_USERNAME = "username";
+    public final static String KEY_PASSWORD = "password";
+    public final static String KEY_MODE = "mode";
     // Predefined value for LoginRequest command parameter
-    private final static String CMD_LOGIN_REQUEST = "login";
+    public final static String CMD = "login";
 
     // Password encryption modes
     private final static String MODE_PLAINTEXT = "plaintext";
     private final static String MODE_MD5 = "md5";
-    
+
     // All possible encoders stored here
     private final Map<String, PasswordEncoder> encoders = new HashMap<>();
     
@@ -32,10 +32,22 @@ public class LoginRequestMsg extends MessageImpl {
      */
     public LoginRequestMsg() {
         super(true);
-        setCommand(CMD_LOGIN_REQUEST);
+        setCommand(CMD);
         addEncoder(new PlaintextEncoder());
     }
 
+    /**
+     * Create a LoginRequest message from message content.
+     * Can be used to cast from plain MessageImpl to specific LoginRequestMsg
+     * @param srcMsg source message to be copied
+     * @return 
+     */
+    public static LoginRequestMsg createFrom(MessageImpl srcMsg) {
+        LoginRequestMsg msg = new LoginRequestMsg();
+        msg.cloneFrom(srcMsg);
+        return msg;
+    }
+    
     /**
      * Get username
      * @return 
