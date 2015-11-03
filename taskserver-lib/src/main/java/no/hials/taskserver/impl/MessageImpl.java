@@ -13,10 +13,9 @@ import no.hials.taskserver.Message;
  * Parse param value - param name received, parsing value currently
  * Ready - done parsing, all fine
  * Invalid - done parsing, something was wrong with the params
- * Outgoing - currently this message is used to construct an outgoing message
  * @author gist
  */
-enum State { WAIT_START, PARSE_PARAM_NAME, PARSE_PARAM_VALUE, READY, INVALID, OUTGOING }
+enum State { WAIT_START, PARSE_PARAM_NAME, PARSE_PARAM_VALUE, READY, INVALID }
 
 /**
  * Implementation of message encoding protocol, described in Lab 06
@@ -34,6 +33,9 @@ public class MessageImpl implements Message {
     
     
     private State state = State.WAIT_START;
+    
+    // When true, this message is meant for sending
+    private boolean forSending;
    
     // Separators
     // General message format: >key1=val1#key2=val2#...$
@@ -64,9 +66,16 @@ public class MessageImpl implements Message {
      * Create a new message
      * @param forSending set it to true, if this message is message is meant
      * to be sent (not for receiving incoming message)
+     * Warning: You should not reuse the same message for reading and writing!
      */
     public MessageImpl(boolean forSending) {
-        this.state = forSending ? State.OUTGOING : State.WAIT_START;
+        this.state = State.WAIT_START;
+        this.forSending = forSending;
+    }
+    
+    @Override
+    public boolean isForSending() {
+        return forSending;
     }
     
     /**
@@ -78,6 +87,7 @@ public class MessageImpl implements Message {
         if (srcMsg != null) {
             this.parameters = srcMsg.parameters;
             this.state = srcMsg.state;
+            this.forSending = srcMsg.forSending;
             this.tmpName = srcMsg.tmpName;
             this.tmpValue = srcMsg.tmpValue;
         }
@@ -101,12 +111,6 @@ public class MessageImpl implements Message {
             case INVALID:
                 // we dismiss anything except start symbol which is handled above
                 return false;
-
-            case OUTGOING:
-                // When we start receiving bytes in a message that is outgoing,
-                // we switch to incoming mode;
-                state = State.WAIT_START;
-                break;
 
             case PARSE_PARAM_NAME:
                 switch (c) {
@@ -175,7 +179,7 @@ public class MessageImpl implements Message {
      */
     @Override
     public boolean isReady() {
-        return (state == State.READY || state == State.OUTGOING)
+        return (state == State.READY || isForSending())
                 && !parameters.isEmpty();
     }
 

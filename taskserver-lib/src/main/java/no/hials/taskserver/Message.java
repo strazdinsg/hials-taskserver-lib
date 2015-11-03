@@ -32,6 +32,12 @@ public interface Message {
      * @return 
      */
     public boolean isReady();
+
+    /**
+     * Returns true if this message is meant for sending data (not receiving)
+     * @return 
+     */
+    public boolean isForSending();
     
     /**
      * Get a value of a parameter in the message by parameter name

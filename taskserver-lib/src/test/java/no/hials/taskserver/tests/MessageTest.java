@@ -218,4 +218,17 @@ public class MessageTest {
         assertEquals(TaskResponseMsg.CMD, msg.getCommand());
         assertEquals(r, msg.getResult());        
     }
+    
+    @Test
+    public void clearAndFormatTest() {
+        // Test if clear() does not destroy an outgoing message
+        Message msg = new MessageImpl(true);
+        assertTrue(msg.isForSending());
+        msg.clear();
+        assertTrue(msg.isForSending());
+        assertFalse(msg.isReady()); // Should not be ready - no parameters yet
+        msg.setParamValue("cmd", "getGrade");
+        assertTrue(msg.isReady()); // Now it should be ready
+        assertTrue(msg.isForSending());
+    }
 }
