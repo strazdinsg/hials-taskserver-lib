@@ -22,6 +22,18 @@ public class GradingResponseMsg extends MessageImpl {
     }
 
     /**
+     * Create a GradingResponse message from message content.
+     * Can be used to cast from plain MessageImpl to specific GradingResponse
+     * @param srcMsg source message to be copied
+     * @return 
+     */
+    public static GradingResponseMsg createFrom(MessageImpl srcMsg) {
+        GradingResponseMsg msg = new GradingResponseMsg(false);
+        msg.cloneFrom(srcMsg);
+        return msg;
+    }
+    
+    /**
      * Set current grade 
      * @param grade current grade (in this session) in percent
      */
