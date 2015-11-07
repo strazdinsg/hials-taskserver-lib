@@ -7,16 +7,27 @@ package no.hials.taskserver.impl;
  * 2015-10-31
  */
 public enum ResultCode { 
+    /** No error, all ok */
     RES_OK,
     LOGIN_ERROR,
+    /** Some internal error of the server (not client's fault) */
     INTERNAL_ERROR,
+    /** Not allowed to perform this action before authorization */
     UNAUTHORIZED,
+    /** Other error. Check message to understand details */
     OTHER,
+    /** Incorrect message structure received from the client */
     INCORRECT_MSG,
+    /** The solution to this task is not correct */
     INCORRECT_SOLUTION,
+    /** This should be used by the client to request next task from the server 
+     * without solving the current one */
     NEXT_TASK,
+    /** This should be used by the client to request stopping the tasks */
     DONE_WITH_TASKS,
+    /** Too much time since last message */
     TIMEOUT,
+    /** This feature is currently not implemented */
     NOT_IMPLEMENTED;
     
     /**
@@ -25,7 +36,7 @@ public enum ResultCode {
      * @return 
      */
     public static boolean isValid(int code) {
-        return code >= 0 && code < ResultCode.values().length;
+        return code >= 0 && code < values().length;
     }
     
     /**
@@ -35,7 +46,7 @@ public enum ResultCode {
      */
     public static ResultCode fromInt(int code) {
         if (isValid(code)) {
-            return ResultCode.values()[code];
+            return values()[code];
         } else {
             return null;
         }
