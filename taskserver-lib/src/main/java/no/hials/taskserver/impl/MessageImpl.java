@@ -60,6 +60,7 @@ public class MessageImpl implements Message {
     public void clear() {
         parameters.clear();
         state = State.WAIT_START;
+        tmpName = tmpValue = "";
     }
 
     /**
@@ -222,14 +223,17 @@ public class MessageImpl implements Message {
     
     /**
      * Add a new parameter to the message
+     * Warning: if the parameter name or value contains some invalid characters,
+     * the parameter will be discarded without any notice
      * @param paramName always converted to lowercase
      * @param paramValue 
      */
     @Override
     public void setParamValue(String paramName, String paramValue) {
-        if (paramName != null && !paramName.equals("")) {
-            parameters.put(paramName.toLowerCase(), paramValue);
-        }
+        if (paramName == null || paramName.equals("")) return;
+        if (containsBadChars(paramName) || containsBadChars(paramValue)) return;
+        
+        parameters.put(paramName.toLowerCase(), paramValue);
     }
     
     /**
@@ -323,5 +327,21 @@ public class MessageImpl implements Message {
             result += "  P: " + entry.getKey() + ": " + entry.getValue() + "\r\n";
         }
         return result;
+    }
+
+    /**
+     * Return true if the string contains some special characters
+     * @param s
+     * @return 
+     */
+    private boolean containsBadChars(String s) {
+        if (s == null) return false;
+        for (char c : s.toCharArray()) {
+            if (c == START_SYMBOL || c  == END_SYMBOL || c == PARAM_SEPARATOR
+                    || c == KEYVAL_SEPARATOR) {
+                return true;
+            }            
+        }
+        return false;
     }
 }

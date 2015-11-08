@@ -231,4 +231,75 @@ public class MessageTest {
         assertTrue(msg.isReady()); // Now it should be ready
         assertTrue(msg.isForSending());
     }
+    
+    /**
+     * Test what happens when invalid param value set
+     */
+    @Test
+    public void testWrongParamValue() {
+        MessageImpl msg = new MessageImpl(true);
+        // This param should be discarded
+        msg.setParamValue("comment", "Some characters == not allowed");
+        assertTrue(msg.isForSending());
+        // Not ready - no params yet
+        assertNull(msg.getParamValue("comment"));
+        assertFalse(msg.isReady());
+        // Set one good param
+        String v = "valid value";
+        msg.setParamValue("newField", v);
+        assertTrue(msg.isReady());
+        assertNull(msg.getParamValue("comment"));
+        assertEquals(v, msg.getParamValue("newField"));
+    }
+
+    /**
+     * Test what happens when invalid param name set
+     */
+    @Test
+    public void testWrongParamName() {
+        MessageImpl msg = new MessageImpl(true);
+        // This param should be discarded
+        msg.setParamValue("comment == false", "Some characters");
+        assertTrue(msg.isForSending());
+        // Not ready - no params yet
+        assertNull(msg.getParamValue("comment"));
+        assertNull(msg.getParamValue("comment == false"));
+        assertFalse(msg.isReady());
+        // Set one good param
+        String v = "valid value";
+        msg.setParamValue("newField", v);
+        assertTrue(msg.isReady());
+        assertNull(msg.getParamValue("comment"));
+        assertEquals(v, msg.getParamValue("newField"));
+    }
+    
+    /**
+     * Test if incoming invalid sequence is discarded
+     */
+    @Test
+    public void testInvalidIncommingSequence() {
+        MessageImpl msg = new MessageImpl(false);
+        
+        String msgData = ">username=Girts#invalidParamVal=This == invalid$   ";
+        char[] msgChars = msgData.toCharArray();
+        msg.clear();
+        assertEquals(false, msg.isReady());
+        for (char c : msgChars) {
+            msg.addByte((byte) c);            
+        }
+        assertEquals(false, msg.isReady());
+        assertEquals("Girts", msg.getParamValue("username"));
+        assertNull(msg.getParamValue("invalidParamVal"));
+
+        // Append next message to it (without cleaning), should reset the old params
+        msgData = ">pwd=Apelsin456$";
+        msgChars = msgData.toCharArray();
+        for (char c : msgChars) {
+            msg.addByte((byte) c);            
+        }
+        assertEquals(true, msg.isReady());
+        assertNull(msg.getParamValue("username"));
+        assertNull(msg.getParamValue("invalidParamVal"));
+        assertEquals("Apelsin456", msg.getParamValue("pwd"));
+    }
 }
