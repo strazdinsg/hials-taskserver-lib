@@ -38,7 +38,7 @@ public class TaskRequestMsg extends MessageImpl {
      * @param srcMsg source message to be copied
      * @return 
      */
-    static TaskRequestMsg createFrom(MessageImpl srcMsg) {
+    public static TaskRequestMsg createFrom(MessageImpl srcMsg) {
         TaskRequestMsg msg = new TaskRequestMsg(false);
         msg.cloneFrom(srcMsg);
         return msg;
